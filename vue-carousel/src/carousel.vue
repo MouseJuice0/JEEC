@@ -1,10 +1,9 @@
 <template>
-    <Carousel>
+    <Carousel class="carousel-section"  @slide-end="SlideEnd">
         <Slide :key="slide">
             <div class="carousel__item">
                 <div class="question">
-                    <h1>你瞅啥?</h1>
-                    <p>{{ answer }}</p>
+                    <h1>Qual a cor clássica do Técnico?</h1>
                 </div>
             </div>  
         </Slide>
@@ -12,22 +11,26 @@
         <Slide :key="slide">
             <div class="carousel__item">
                 <div class="date">
-                    <h1>{{ date }}</h1>
+                    <form @submit.prevent="newDate">
+                        <input type="date" v-model="date">
+                        <button>Enter</button>
+                    </form>
                 </div>
             </div>
         </Slide>
 
         <Slide :key="slide">
             <div class="carousel__item">
-                <div class="flex-item1">
-                    <h1>Interation of Wind Farms into Electrity Grids</h1>
-                </div>
-                <div class="flex-item2">
-                    <h2>Workshops</h2>
-                    <h2>by Vestas</h2>
-                </div>
-                <div class="flex-item3">
-                    <p>This workshops will cover the representation of wind farms in simulation software, with an empasis on wind turbine design and electrical performance for compliance with grid requirements.</p>
+                <div class="flex-box">
+                    <div class="flex-item1">
+                        <p class="text1">Interation of Wind Farms into Electrity Grids</p>
+                    </div>
+                    <div class="flex-item2">
+                        <p class="text2">Workshops by Vestas</p>
+                    </div>
+                    <div class="flex-item3">
+                        <p class="text3">This workshops will cover the representation of wind farms in simulation software, with an empasis on wind turbine design and electrical performance for compliance with grid requirements.</p>
+                    </div>
                 </div>
             </div>
         </Slide>
@@ -43,17 +46,13 @@
             <Pagination />
         </template>
     </Carousel>
-
-    <div>
-        <form @submit.prevent="responder_pergunta">
-            <input v-model="text" required placeholder="Type answer">
-            <button>Enter</button>
-        </form>
-        <form @submit.prevent="responder_data">
-            <input v-model="new_date" required placeholder="Type new date">
-            <button>Enter</button>
-        </form>
+    <div class="answer1">
+        <p v-if=" currentSlide === 1">Azul</p>
+        <p v-else-if="currentSlide === 2">{{ new_date }}</p>
+        <p v-else>{{ '' }}</p>
     </div>
+
+
   </template>
   
   <script>
@@ -74,20 +73,27 @@
         return {
             text: '',
             answer: '',
-            date: '08/05/2024',
+            date: '',
             new_date: '',
-            image: './src/challenge.png'
+            image: './src/challenge.png',
+            currentSlide : 1
         }
     },
     methods: {
-        responder_pergunta() {
-            this.answer = ''
-            this.answer = this.text 
-            this.text = ''
+        SlideEnd(data) {
+            console.log('slide-end', data)
+            if(data.currentSlideIndex == 0){
+                this.currentSlide = 1
+            }
+            else if(data.currentSlideIndex == 1){
+                this.currentSlide = 2
+            }
+            else{
+                this.currentSlide =0
+            }
         },
-        responder_data () {
-            this.date = this.new_date
-            this.new_date= ''
+        newDate() {
+            this.new_date = this.date
         }
     }
   })
@@ -97,19 +103,29 @@
   .question {
     width: 50%;
   }
-  .answer {
-    width: 50%;
+  .answer1 {
+    display: flex;
+    justify-content: center;
   }
 
-  /*.challenge2 {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }*/
+  .date input {
+    font-size: larger
+  }
+  
+  .date button {
+    font-size: larger;
+  }
 
+    .flex-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        row-gap: 20px;
+        align-content: flex-start;
+        margin: auto 5%;
+    }
     .flex-item1{
         order: 1;
-        align-items: flex-start;
         text-align: start;
     }
 
@@ -120,11 +136,32 @@
 
     .flex-item3 {
         order:3;
-        align-items: flex-end;
         text-align: start;
+    }
+
+    .text1 {
+        font-size: 50px;
+        margin-block: 0%;
+    }
+
+    .text2 {
+        font-size: 40px;
+        margin-block: 0%;
+    }
+
+    .text3 {
+        font-size: 30px;
+        margin-block: 0%;
     }
     .image_style{
         width: 100%;
+    }
+
+    .carousel-section {
+    max-width: 50%;
+    margin: auto auto;
+    margin-top: 10%;
+    
     }
 
   .carousel__item {
@@ -132,9 +169,8 @@
     min-height: 500px;*/
     width: 100%;
     height: 100%;
-    max-width: 700px;
 
-    background-color: rgb(41, 154, 207);
+    background-color: rgb(75, 179, 227);
     color: white;
     font-size: 20px;
     border-radius: 8px;
@@ -144,12 +180,11 @@
   }
   
   .carousel__slide {
-    max-width: 700px;
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 300px;
+    height: 500px;
     border: 1px #ccc;
   }
   
