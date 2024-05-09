@@ -106,7 +106,9 @@
   .answer1 {
     display: flex;
     justify-content: center;
+    font-size: xx-large
   }
+  
 
   .date input {
     font-size: larger
